@@ -1,0 +1,7 @@
+pre_deploy:
+  - pip install -r requirements.txt
+  - python manage.py makemigrations post_app
+  - python manage.py migrate --noinput
+
+post_deploy:
+  - echo "The application has been deployed successfully."
