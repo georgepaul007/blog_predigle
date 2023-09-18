@@ -124,6 +124,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+DEBUG = False 
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
     'rest_framework.pagination.PageNumberPagination',
