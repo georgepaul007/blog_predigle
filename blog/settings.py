@@ -85,11 +85,14 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST':os.environ.get('HOST'),
+        'NAME': os.environ.get('DB_NAME'), 
+        'USER': os.environ.get('DB_USER'), 
+        'PASSWORD': os.environ.get('DB_PASS'), 
         'PORT':'3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',  # Use appropriate character set
+            'collation': 'utf8mb4_unicode_ci',  # Use appropriate collation
+        },
     }
 }
 
@@ -123,10 +126,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-DEBUG = False 
-
-ALLOWED_HOSTS = ['*']
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':

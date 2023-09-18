@@ -26,20 +26,23 @@ from django.db.models import Q
 )
 @api_view(['POST'])
 def create_post(request, slug):
+    if Post.objects.filter(post=slug).exists():
+        return Response({"response": "Post with slug already exists"}, status=status.HTTP_400_BAD_REQUEST)
     serializer = CreatePostSerializer(data=request.data)
     if serializer.is_valid():
         author_name = serializer.validated_data['author']
-        author_of_post, created = Author.objects.get_or_create(first_name=author_name)
+        if not Author.objects.filter(first_name=author_name).exists():
+            return Response({"response": "Author does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        author_of_post = Author.objects.get(first_name=author_name)
         tags = serializer.validated_data.get('tags', [])
         tag_objects = []
-        print (tags)
         for tag_name in tags:
             tag, created = Tag.objects.get_or_create(caption=tag_name)
             tag_objects.append(tag)
 
-        # Set the author and tags fields directly in the validated_data
         serializer.validated_data['author'] = author_of_post
         serializer.validated_data.pop('tags')
+        print("this george: ", serializer.validated_data, slug)
         post = Post.objects.create(post=slug,  **serializer.validated_data)
         post.tags.set(tag_objects)
         response_data = {"response": "post-created"}
@@ -52,9 +55,14 @@ def get_posts(request):
     data = Post.objects.all()
     post_data = PostSerializer(data, many=True).data
     for post in post_data:
+        tag_objects = []
+        for tag in post['tags']:
+            tag_objects.append(Tag.objects.get(id=tag))
+        print(tag_objects)
+        post['tags'] = TagSerializer(tag_objects, many=True).data
         author_id = post['author']
         author = Author.objects.get(id=author_id)
-        post['author'] = AuthorSerializer(author).data    
+        post['author'] = AuthorSerializer(author).data 
     response_data = {"data": post_data}
     return Response(response_data, status=status.HTTP_200_OK)
 
