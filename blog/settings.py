@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME'), 
         'USER': os.environ.get('DB_USER'), 
         'PASSWORD': os.environ.get('DB_PASS'), 
-        'HOST': os.environ.get('DB_PASS'), 
+        'HOST': os.environ.get('HOST'), 
         'PORT':'3306',
         'OPTIONS': {
             'charset': 'utf8mb4',  # Use appropriate character set
