@@ -42,7 +42,6 @@ def create_post(request, slug):
 
         serializer.validated_data['author'] = author_of_post
         serializer.validated_data.pop('tags')
-        print("this george: ", serializer.validated_data, slug)
         post = Post.objects.create(post=slug,  **serializer.validated_data)
         post.tags.set(tag_objects)
         response_data = {"response": "post-created"}
